@@ -18,6 +18,9 @@
 # misc
 .DS_Store
 *.pem
+CLAUDE.md
+AGENT.md
+GEMINI.md
 
 # debug
 npm-debug.log*
