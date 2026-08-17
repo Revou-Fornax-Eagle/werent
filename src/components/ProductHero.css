@@ -1,0 +1,22 @@
+.product-hero {
+  position: relative;
+  width: 389px;
+  max-width: 100%;
+  height: 585px;
+}
+
+.product-hero__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-hero__credit {
+  position: absolute;
+  right: 16px;
+  bottom: 15px;
+  font-family: Inter, var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #fff;
+}

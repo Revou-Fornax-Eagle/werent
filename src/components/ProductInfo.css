@@ -1,0 +1,55 @@
+.product-info {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 331px;
+  max-width: 100%;
+  padding: 16px 0;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.product-info__title {
+  margin: 0;
+  font-family: Montserrat, var(--sans);
+  font-size: 18px;
+  font-weight: 600;
+  color: #000;
+}
+
+.product-info__rating-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.product-info__review-count {
+  font-family: Montserrat, var(--sans);
+  font-size: 9px;
+  font-weight: 200;
+  color: #000;
+}
+
+.product-info__size-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-info__size-badge {
+  font-family: Montserrat, var(--sans);
+  font-size: 11px;
+  font-weight: 300;
+  color: #000;
+}
+
+.product-info__size-guide {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: Montserrat, var(--sans);
+  font-size: 10px;
+  font-weight: 500;
+  color: #000;
+}

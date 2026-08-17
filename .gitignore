@@ -8,6 +8,11 @@
 # testing
 /coverage
 
+# vite
+/dist
+dist-ssr
+*.local
+
 # next.js
 /.next/
 /out/
