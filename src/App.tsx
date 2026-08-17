@@ -2,6 +2,8 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
+import CheckoutBar from './components/CheckoutBar'
+import ReviewCard from './components/ReviewCard'
 import './App.css'
 
 function App() {
@@ -29,6 +31,19 @@ function App() {
           Count is {count}
         </button>
       </section>
+
+      <CheckoutBar price="Rp 300.000" duration="4 Day" onAdd={() => alert('Added to cart')} />
+
+      <ReviewCard
+        reviewerStats="165 CM   65 KG   88 / 78 / 110 CM"
+        rating={5}
+        likeCount={5}
+        reviewText="This black kaftan is a wardrobe staple for me now! The quality is outstanding, and it's incredibly versatile. I've worn it to brunch with friends, to the beach as a cover-up, and even to a formal dinner with the right accessories. It's so comfortable and"
+        imageUrl={heroImg}
+        date="Nov 29, 2023"
+        onLike={() => alert('Liked')}
+        onReadMore={() => alert('Read more')}
+      />
 
       <div className="ticks"></div>
 

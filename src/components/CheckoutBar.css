@@ -1,0 +1,51 @@
+.checkout-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 390px;
+  max-width: 100%;
+  padding: 16px 15px;
+  box-sizing: border-box;
+  background: #fff;
+  border: 1px solid rgba(43, 102, 70, 0.2);
+}
+
+.checkout-bar__info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.checkout-bar__label {
+  font-family: Montserrat, var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #000;
+}
+
+.checkout-bar__price {
+  font-family: Montserrat, var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  color: #000;
+}
+
+.checkout-bar__add {
+  flex-shrink: 0;
+  width: 131px;
+  height: 38px;
+  border: none;
+  border-radius: 4px;
+  background: #cdaa44;
+  font-family: Montserrat, var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #000;
+  cursor: pointer;
+}
+
+.checkout-bar__add:hover {
+  background: #bd9a38;
+}

@@ -1,0 +1,138 @@
+.review-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 348.5px;
+  max-width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  background: #fff;
+  text-align: left;
+}
+
+.review-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.review-card__meta {
+  display: flex;
+  gap: 16px;
+}
+
+.review-card__avatar {
+  width: 28px;
+  height: 29px;
+  border-radius: 40px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.review-card__avatar--placeholder {
+  background: #e5e4e7;
+}
+
+.review-card__meta-text {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.review-card__stars {
+  display: flex;
+  gap: 7px;
+}
+
+.review-card__star {
+  width: 8px;
+  height: 8px;
+  background: #d9d9d9;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+}
+
+.review-card__star--filled {
+  background: #fbbf24;
+}
+
+.review-card__stats {
+  font-family: Montserrat, var(--sans);
+  font-size: 9px;
+  font-weight: 500;
+  color: #9b9a9a;
+}
+
+.review-card__like {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: Montserrat, var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: #000;
+}
+
+.review-card__thumb {
+  width: 20px;
+  height: 20px;
+  /* TODO: replace with exported thumb_up_alt icon asset (not available from Zeplin component data) */
+  background: #000;
+  clip-path: polygon(0% 40%, 20% 40%, 20% 100%, 0% 100%);
+}
+
+.review-card__text {
+  margin: 0;
+  font-family: Montserrat, var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 150%;
+  color: #000;
+}
+
+.review-card__read-more {
+  align-self: flex-start;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: Montserrat, var(--sans);
+  font-size: 12px;
+  font-weight: 500;
+  color: #2b6646;
+}
+
+.review-card__image {
+  width: 56px;
+  height: 56px;
+  flex-shrink: 0;
+  overflow: hidden;
+  background: #d9d9d9;
+}
+
+.review-card__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.review-card__date {
+  font-family: Montserrat, var(--sans);
+  font-size: 9px;
+  font-weight: 500;
+  color: #9b9a9a;
+}
