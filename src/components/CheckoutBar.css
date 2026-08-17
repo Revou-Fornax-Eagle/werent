@@ -1,14 +1,21 @@
 .checkout-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  width: 390px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 390px;
+  margin: 0 auto;
   padding: 16px 15px;
   box-sizing: border-box;
   background: #fff;
   border: 1px solid rgba(43, 102, 70, 0.2);
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .checkout-bar__info {
@@ -30,22 +37,4 @@
   font-size: 15px;
   font-weight: 500;
   color: #000;
-}
-
-.checkout-bar__add {
-  flex-shrink: 0;
-  width: 131px;
-  height: 38px;
-  border: none;
-  border-radius: 4px;
-  background: #cdaa44;
-  font-family: Montserrat, var(--sans);
-  font-size: 12px;
-  font-weight: 400;
-  color: #000;
-  cursor: pointer;
-}
-
-.checkout-bar__add:hover {
-  background: #bd9a38;
 }

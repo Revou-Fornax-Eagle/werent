@@ -1,3 +1,4 @@
+import StarRating from './StarRating'
 import './ReviewCard.css'
 
 interface ReviewCardProps {
@@ -33,14 +34,7 @@ export default function ReviewCard({
             <div className="review-card__avatar review-card__avatar--placeholder" />
           )}
           <div className="review-card__meta-text">
-            <div className="review-card__stars" aria-label={`${rating} out of 5 stars`}>
-              {Array.from({ length: 5 }, (_, i) => (
-                <span
-                  key={i}
-                  className={`review-card__star${i < rating ? ' review-card__star--filled' : ''}`}
-                />
-              ))}
-            </div>
+            <StarRating rating={rating} />
             <span className="review-card__stats">{reviewerStats}</span>
           </div>
         </div>

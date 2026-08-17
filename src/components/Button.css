@@ -1,0 +1,18 @@
+.btn-primary {
+  flex-shrink: 0;
+  min-width: 131px;
+  height: 38px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 4px;
+  background: #cdaa44;
+  font-family: Montserrat, var(--sans);
+  font-size: 12px;
+  font-weight: 400;
+  color: #000;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background: #bd9a38;
+}

@@ -39,33 +39,6 @@
   gap: 5px;
 }
 
-.review-card__stars {
-  display: flex;
-  gap: 7px;
-}
-
-.review-card__star {
-  width: 8px;
-  height: 8px;
-  background: #d9d9d9;
-  clip-path: polygon(
-    50% 0%,
-    61% 35%,
-    98% 35%,
-    68% 57%,
-    79% 91%,
-    50% 70%,
-    21% 91%,
-    32% 57%,
-    2% 35%,
-    39% 35%
-  );
-}
-
-.review-card__star--filled {
-  background: #fbbf24;
-}
-
 .review-card__stats {
   font-family: Montserrat, var(--sans);
   font-size: 9px;

@@ -1,3 +1,4 @@
+import Button from './Button'
 import './CheckoutBar.css'
 
 interface CheckoutBarProps {
@@ -15,9 +16,7 @@ export default function CheckoutBar({ price, duration, onAdd }: CheckoutBarProps
           {price}/{duration}
         </span>
       </div>
-      <button type="button" className="checkout-bar__add" onClick={onAdd}>
-        TAMBAHKAN
-      </button>
+      <Button onClick={onAdd}>TAMBAHKAN</Button>
     </div>
   )
 }

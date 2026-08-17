@@ -2,8 +2,9 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
+import designerImg from './assets/designers/designer-banner.png'
 import CheckoutBar from './components/CheckoutBar'
-import ReviewCard from './components/ReviewCard'
+import ProductPage from './components/ProductPage'
 import './App.css'
 
 function App() {
@@ -32,101 +33,44 @@ function App() {
         </button>
       </section>
 
-      <CheckoutBar price="Rp 300.000" duration="4 Day" onAdd={() => alert('Added to cart')} />
-
-      <ReviewCard
-        reviewerStats="165 CM   65 KG   88 / 78 / 110 CM"
+      <ProductPage
+        heroImageUrl={heroImg}
+        heroCredit="source: Amina Moroccan Abaya"
+        title="Black Kaftan with Embellishment"
         rating={5}
-        likeCount={5}
-        reviewText="This black kaftan is a wardrobe staple for me now! The quality is outstanding, and it's incredibly versatile. I've worn it to brunch with friends, to the beach as a cover-up, and even to a formal dinner with the right accessories. It's so comfortable and"
-        imageUrl={heroImg}
-        date="Nov 29, 2023"
-        onLike={() => alert('Liked')}
-        onReadMore={() => alert('Read more')}
+        reviewCount={7}
+        size="M"
+        fabric="SILK"
+        fit="TRUE TO SIZE"
+        sizeGuide={[{ size: 'M', bust: '78 cm', length: '89 cm' }]}
+        designerName="Amina"
+        designerImageUrl={designerImg}
+        ratingBreakdown={[
+          { label: 'Small', percent: 2 },
+          { label: 'True to Size', percent: 85 },
+          { label: 'Large', percent: 13 },
+        ]}
+        reviews={[
+          {
+            reviewerStats: '165 CM   65 KG   88 / 78 / 110 CM',
+            rating: 5,
+            likeCount: 5,
+            reviewText:
+              "This black kaftan is a wardrobe staple for me now! The quality is outstanding, and it's incredibly versatile. I've worn it to brunch with friends, to the beach as a cover-up, and even to a formal dinner with the right accessories. It's so comfortable and easy to style. I can't recommend it enough! ps. btw im using my boyfriend account xixi!",
+            imageUrl: heroImg,
+            date: 'Nov 29, 2023',
+          },
+        ]}
+        onViewSizeGuide={() => alert('View size guide')}
+        onViewCollection={() => alert('View the collection')}
+        onViewMoreReviews={() => alert('View more reviews')}
       />
+
+      <CheckoutBar price="Rp 300.000" duration="4 Day" onAdd={() => alert('Added to cart')} />
 
       <div className="ticks"></div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+
 
       <div className="ticks"></div>
       <section id="spacer"></section>

@@ -1,0 +1,19 @@
+.product-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 390px;
+  max-width: 100%;
+  margin: 0 auto;
+  background: #fff;
+}
+
+.product-page__reviews {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 349px;
+  max-width: 100%;
+  padding: 20px 0;
+  box-sizing: border-box;
+}
