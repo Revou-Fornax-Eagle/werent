@@ -1,14 +1,14 @@
-import './RatingBreakdown.css'
+import "./RatingBreakdown.css";
 
 interface BreakdownRow {
-  label: string
-  percent: number
+  label: string;
+  percent: number;
 }
 
 interface RatingBreakdownProps {
-  reviewCount: number
-  rows: BreakdownRow[]
-  onViewMore?: () => void
+  reviewCount: number;
+  rows: BreakdownRow[];
+  onViewMore?: () => void;
 }
 
 export default function RatingBreakdown({ reviewCount, rows, onViewMore }: RatingBreakdownProps) {
@@ -32,5 +32,5 @@ export default function RatingBreakdown({ reviewCount, rows, onViewMore }: Ratin
         ))}
       </div>
     </div>
-  )
+  );
 }
