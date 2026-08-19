@@ -121,6 +121,8 @@ function App() {
           { label: "True to Size", percent: 85 },
           { label: "Large", percent: 13 },
         ]}
+        fitAssessment={productResponse?.data.fitAssessment}
+        fitLoading={!productResponse}
         reviews={reviews.map(mapApiReview)}
         submitting={isSubmitting}
         onViewSizeGuide={() => alert("View size guide")}

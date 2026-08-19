@@ -4,9 +4,11 @@ import DesignerInfo from "./DesignerInfo";
 import ProductDetailSection from "./ProductDetailSection";
 import RatingBreakdown from "./RatingBreakdown";
 import ReviewCard from "./ReviewCard";
+import FitDistributionScale from "./FitDistributionScale";
 import "./ProductPage.css";
 import Button from "./Button";
 import { useState } from "react";
+import type { FitAssessment } from "../types/productData";
 
 interface SizeGuideRow {
   size: string;
@@ -49,6 +51,8 @@ interface ProductPageProps {
   designerName: string;
   designerImageUrl?: string;
   ratingBreakdown: BreakdownRow[];
+  fitAssessment?: FitAssessment;
+  fitLoading?: boolean;
   reviews: Review[];
   submitting?: boolean;
   onViewSizeGuide?: () => void;
@@ -71,6 +75,8 @@ export default function ProductPage({
   designerName,
   designerImageUrl,
   ratingBreakdown,
+  fitAssessment,
+  fitLoading,
   reviews,
   submitting,
   onViewSizeGuide,
@@ -90,6 +96,15 @@ export default function ProductPage({
       <ProductDetailSection fabric={fabric} fit={fit} sizeGuide={sizeGuide} details={details} />
       <Button onClick={() => setOpenForm(true)}>Add a review</Button>
       <div className="product-page__reviews">
+        <FitDistributionScale
+          variant="mobile"
+          runsSmall={fitAssessment?.distribution.RUNS_SMALL ?? 0}
+          trueToSize={fitAssessment?.distribution.TRUE_TO_SIZE ?? 0}
+          runsLarge={fitAssessment?.distribution.RUNS_LARGE ?? 0}
+          totalVotes={fitAssessment?.totalResponses ?? 0}
+          loading={fitLoading}
+          onSupportClick={() => alert("Discuss fitting with customer support")}
+        />
         {reviewCount > 0 ? (
           <>
             <RatingBreakdown reviewCount={reviewCount} rows={ratingBreakdown} onViewMore={onViewMoreReviews} />
