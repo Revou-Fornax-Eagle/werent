@@ -4,7 +4,7 @@ import designerImg from "./assets/designers/designer-banner.png";
 import CheckoutBar from "./components/CheckoutBar";
 import ProductPage, { type ReviewSubmitData } from "./components/ProductPage";
 import { API_URL } from "./utils/api";
-import type { Product, ProductResponse } from "./types/productData";
+import { type FitAssessment, type Product, type ProductResponse } from "./types/productData";
 import { useRealtimeReviewCount } from "./hooks/useRealtimeReviewCount";
 import "./App.css";
 import { mapApiReview, type ApiReview } from "./utils/mapReviews";
@@ -12,12 +12,15 @@ import { mapApiReview, type ApiReview } from "./utils/mapReviews";
 function App() {
   const [product, setProduct] = useState<Product | null>(null);
   const [productResponse, setProductResponse] = useState<ProductResponse | null>(null);
-  const PRODUCT_ID = "3a137a8b-da7a-4e26-a1e2-860c896ea42e";
-  const USER_ID = "95cba87f-cb43-4552-9a00-0f7d4d9c62a5";
+  const PRODUCT_ID = "a498da4c-716d-4648-8304-681265be849f";
+  const USER_ID = "5e25777c-78ae-4bfe-8b84-765128e1bb27";
 
   const [reviews, setReviews] = useState<ApiReview[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const [fitAssesment, setFitAssesment] = useState<FitAssessment | null>(null);
+
   // fetch product
   useEffect(() => {
     const fetchProduct = async () => {
@@ -27,9 +30,10 @@ function App() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data: ProductResponse = await response.json();
-        // console.log("Fetched product data:", data);
+        console.log("Fetched product data:", data);
         setProductResponse(data);
         setProduct(data.data.product);
+        setFitAssesment(data.data.fitAssessment);
       } catch (error) {
         console.error("Error fetching product data:", error);
       }
@@ -38,22 +42,22 @@ function App() {
   }, []);
 
   //fetch reviews
-  useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const response = await fetch(`${API_URL}/reviews/product/${PRODUCT_ID}`);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        console.log("Fetched review data:", data);
-        setReviews(data.data.reviews);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-      }
-    };
-    fetchReviews();
-  }, []);
+  // useEffect(() => {
+  //   const fetchReviews = async () => {
+  //     try {
+  //       const response = await fetch(`${API_URL}/reviews/product/${PRODUCT_ID}`);
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+  //       const data = await response.json();
+  //       console.log("Fetched review data:", data);
+  //       setReviews(data.data.reviews);
+  //     } catch (error) {
+  //       console.error("Error fetching product data:", error);
+  //     }
+  //   };
+  //   fetchReviews();
+  // }, []);
   const liveReviewCount = useRealtimeReviewCount(PRODUCT_ID, productResponse?.data.reviewCount ?? 0);
   const handleSubmitReview = async (data: ReviewSubmitData) => {
     setIsSubmitting(true);
@@ -84,6 +88,10 @@ function App() {
       setIsSubmitting(false);
     }
   };
+
+  const processFitPercentage = (totalResponse: number, distribution: number): number => {
+    return (distribution / totalResponse) * 100;
+  };
   return (
     <>
       {/* <section id="center">
@@ -111,15 +119,15 @@ function App() {
         reviewCount={liveReviewCount}
         size="M"
         fabric="SILK"
-        fit="TRUE TO SIZE"
+        fit={fitAssesment?.assessment ?? ""}
         details={product?.description ?? ""}
         sizeGuide={[{ size: "M", bust: "78 cm", length: "89 cm" }]}
         designerName="Amina"
         designerImageUrl={designerImg}
         ratingBreakdown={[
-          { label: "Small", percent: 2 },
-          { label: "True to Size", percent: 85 },
-          { label: "Large", percent: 13 },
+          { label: "Small", percent: processFitPercentage(fitAssesment?.totalResponses ?? 0, fitAssesment?.distribution.RUNS_SMALL ?? 0) },
+          { label: "True to Size", percent: processFitPercentage(fitAssesment?.totalResponses ?? 0, fitAssesment?.distribution.TRUE_TO_SIZE ?? 0) },
+          { label: "Large", percent: processFitPercentage(fitAssesment?.totalResponses ?? 0, fitAssesment?.distribution.RUNS_LARGE ?? 0) },
         ]}
         reviews={reviews.map(mapApiReview)}
         submitting={isSubmitting}
@@ -132,11 +140,11 @@ function App() {
       {submitError && <p className="submit-error">Error: {submitError}</p>}
 
       <CheckoutBar price="Rp 300.000" duration="4 Day" onAdd={() => alert("Added to cart")} />
-
+      {/* 
       <div className="ticks"></div>
 
       <div className="ticks"></div>
-      <section id="spacer"></section>
+      <section id="spacer"></section> */}
     </>
   );
 }
