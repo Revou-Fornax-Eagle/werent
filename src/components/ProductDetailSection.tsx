@@ -1,22 +1,23 @@
-import './ProductDetailSection.css'
+import "./ProductDetailSection.css";
 
 interface SizeGuideRow {
-  size: string
-  bust: string
-  length: string
+  size: string;
+  bust: string;
+  length: string;
 }
 
 interface ProductDetailSectionProps {
-  fabric: string
-  fit: string
-  sizeGuide: SizeGuideRow[]
+  fabric: string;
+  fit: string;
+  sizeGuide: SizeGuideRow[];
+  details: string;
 }
 
-export default function ProductDetailSection({ fabric, fit, sizeGuide }: ProductDetailSectionProps) {
+export default function ProductDetailSection({ fabric, fit, sizeGuide, details }: ProductDetailSectionProps) {
   return (
     <div className="product-detail">
       <h3 className="product-detail__title">PRODUCT DETAIL</h3>
-
+      <div className="product-detail__label">{details}</div>
       <div className="product-detail__row">
         <span className="product-detail__label">FABRIC</span>
         <span className="product-detail__value">{fabric}</span>
@@ -49,5 +50,5 @@ export default function ProductDetailSection({ fabric, fit, sizeGuide }: Product
         </table>
       </div>
     </div>
-  )
+  );
 }
