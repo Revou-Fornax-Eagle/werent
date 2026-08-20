@@ -1,14 +1,11 @@
 import './DesignerInfo.css'
+import designerBanner from '../assets/designer-banner.webp'
 
 interface DesignerInfoProps {
-  designerName: string
-  designerImageUrl?: string
   onViewCollection?: () => void
 }
 
 export default function DesignerInfo({
-  designerName,
-  designerImageUrl,
   onViewCollection,
 }: DesignerInfoProps) {
   return (
@@ -19,14 +16,7 @@ export default function DesignerInfo({
           VIEW THE COLLECTION
         </button>
       </div>
-      <div className="designer-info__card">
-        {designerImageUrl ? (
-          <img className="designer-info__image" src={designerImageUrl} alt={designerName} />
-        ) : (
-          <div className="designer-info__image designer-info__image--placeholder" />
-        )}
-        <span className="designer-info__name">{designerName}</span>
-      </div>
+      <img className="designer-info__banner" src={designerBanner} alt="n atelier" />
     </div>
   )
 }
