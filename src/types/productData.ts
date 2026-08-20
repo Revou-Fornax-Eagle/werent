@@ -19,7 +19,7 @@ export interface FitDistribution {
 }
 
 export interface FitAssessment {
-  assessment: FitAssessmentType;
+  assessment: FitAssessmentType | null;
   distribution: FitDistribution;
   totalResponses: number;
   hasData: boolean;
