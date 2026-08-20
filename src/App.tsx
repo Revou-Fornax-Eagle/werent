@@ -12,8 +12,8 @@ import { mapApiReview, type ApiReview } from "./utils/mapReviews";
 function App() {
   const [product, setProduct] = useState<Product | null>(null);
   const [productResponse, setProductResponse] = useState<ProductResponse | null>(null);
-  const PRODUCT_ID = "a498da4c-716d-4648-8304-681265be849f";
-  const USER_ID = "5e25777c-78ae-4bfe-8b84-765128e1bb27";
+  const PRODUCT_ID = "8e8ed7ea-c51e-488e-a30b-b15b899aed0f"; // Kemeja Linen Oversize (seeded)
+  const USER_ID = "1a914dc2-6a4d-4f70-a2eb-1453ee8b2636"; // dewi@example.com (seeded)
 
   const [reviews, setReviews] = useState<ApiReview[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
