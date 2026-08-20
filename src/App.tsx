@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import heroImg from "./assets/hero.png";
-import designerImg from "./assets/designers/designer-banner.png";
+import heroImg from "./assets/product-image.webp";
 import CheckoutBar from "./components/CheckoutBar";
 import ProductPage, { type ReviewSubmitData } from "./components/ProductPage";
 import { API_URL } from "./utils/api";
@@ -9,10 +8,21 @@ import { useRealtimeReviewCount } from "./hooks/useRealtimeReviewCount";
 import "./App.css";
 import { mapApiReview, type ApiReview } from "./utils/mapReviews";
 
+// Falls back here when the URL has no /products/:id segment (e.g. bare "/").
+const DEFAULT_PRODUCT_ID = "8e8ed7ea-c51e-488e-a30b-b15b899aed0f"; // Kemeja Linen Oversize (seeded)
+
+/** REV-26: product id comes from the URL path, so navigating to a different
+ * /products/:id fetches a different product instead of always the same one. */
+function getProductIdFromPath(): string {
+  const match = window.location.pathname.match(/^\/products\/([^/]+)/);
+  return match ? decodeURIComponent(match[1]) : DEFAULT_PRODUCT_ID;
+}
+
 function App() {
   const [product, setProduct] = useState<Product | null>(null);
   const [productResponse, setProductResponse] = useState<ProductResponse | null>(null);
-  const PRODUCT_ID = "8e8ed7ea-c51e-488e-a30b-b15b899aed0f"; // Kemeja Linen Oversize (seeded)
+  const [productNotFound, setProductNotFound] = useState(false);
+  const PRODUCT_ID = getProductIdFromPath();
   const USER_ID = "1a914dc2-6a4d-4f70-a2eb-1453ee8b2636"; // dewi@example.com (seeded)
 
   const [reviews, setReviews] = useState<ApiReview[]>([]);
@@ -26,9 +36,14 @@ function App() {
     const fetchProduct = async () => {
       try {
         const response = await fetch(`${API_URL}/products/${PRODUCT_ID}`);
+        if (response.status === 404) {
+          setProductNotFound(true);
+          return;
+        }
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
+        setProductNotFound(false);
         const data: ProductResponse = await response.json();
         console.log("Fetched product data:", data);
         setProductResponse(data);
@@ -39,7 +54,7 @@ function App() {
       }
     };
     fetchProduct();
-  }, []);
+  }, [PRODUCT_ID]);
 
   //fetch reviews
   // useEffect(() => {
@@ -111,9 +126,11 @@ function App() {
         </button>
       </section> */}
 
+      {productNotFound && <p className="submit-error">Product not found for id "{PRODUCT_ID}".</p>}
+
       <ProductPage
         heroImageUrl={heroImg}
-        heroCredit="source: Amina Moroccan Abaya"
+        heroCredit=""
         title={product?.name ?? ""}
         rating={liveReviewCount > 0 ? 5 : 0}
         reviewCount={liveReviewCount}
@@ -122,8 +139,6 @@ function App() {
         fit={fitAssesment?.assessment ?? ""}
         details={product?.description ?? ""}
         sizeGuide={[{ size: "M", bust: "78 cm", length: "89 cm" }]}
-        designerName="Amina"
-        designerImageUrl={designerImg}
         ratingBreakdown={[
           { label: "Small", percent: processFitPercentage(fitAssesment?.totalResponses ?? 0, fitAssesment?.distribution.RUNS_SMALL ?? 0) },
           { label: "True to Size", percent: processFitPercentage(fitAssesment?.totalResponses ?? 0, fitAssesment?.distribution.TRUE_TO_SIZE ?? 0) },

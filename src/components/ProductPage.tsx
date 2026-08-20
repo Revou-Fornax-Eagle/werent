@@ -46,8 +46,6 @@ interface ProductPageProps {
   fit: string;
   details: string;
   sizeGuide: SizeGuideRow[];
-  designerName: string;
-  designerImageUrl?: string;
   ratingBreakdown: BreakdownRow[];
   reviews: Review[];
   submitting?: boolean;
@@ -68,8 +66,6 @@ export default function ProductPage({
   fit,
   details,
   sizeGuide,
-  designerName,
-  designerImageUrl,
   ratingBreakdown,
   reviews,
   submitting,
@@ -85,7 +81,7 @@ export default function ProductPage({
 
       <ProductInfo title={title} rating={rating} reviewCount={reviewCount} size={size} onViewSizeGuide={onViewSizeGuide} />
 
-      <DesignerInfo designerName={designerName} designerImageUrl={designerImageUrl} onViewCollection={onViewCollection} />
+      <DesignerInfo onViewCollection={onViewCollection} />
 
       <ProductDetailSection fabric={fabric} fit={fit} sizeGuide={sizeGuide} details={details} />
       <Button onClick={() => setOpenForm(true)}>Add a review</Button>
