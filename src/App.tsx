@@ -117,6 +117,8 @@ function App() {
         title={product?.name ?? ""}
         rating={liveReviewCount > 0 ? 5 : 0}
         reviewCount={liveReviewCount}
+        fitAssessment={productResponse?.data.fitAssessment}
+        supportContactHref="mailto:support@werent.id?subject=Product%20fit%20consultation"
         size="M"
         fabric="SILK"
         fit={fitAssesment?.assessment ?? ""}

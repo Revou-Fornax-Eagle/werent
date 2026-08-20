@@ -5,6 +5,8 @@ import ProductDetailSection from "./ProductDetailSection";
 import RatingBreakdown from "./RatingBreakdown";
 import ReviewCard from "./ReviewCard";
 import "./ProductPage.css";
+import FitSupportEmptyState from "./FitSupportEmptyState";
+import type { FitAssessment } from "../types/productData";
 import Button from "./Button";
 import { useState } from "react";
 
@@ -44,6 +46,8 @@ interface ProductPageProps {
   size: string;
   fabric: string;
   fit: string;
+  fitAssessment?: FitAssessment;
+  supportContactHref: string;
   details: string;
   sizeGuide: SizeGuideRow[];
   designerName: string;
@@ -66,6 +70,8 @@ export default function ProductPage({
   size,
   fabric,
   fit,
+  fitAssessment,
+  supportContactHref,
   details,
   sizeGuide,
   designerName,
@@ -90,15 +96,25 @@ export default function ProductPage({
       <ProductDetailSection fabric={fabric} fit={fit} sizeGuide={sizeGuide} details={details} />
       <Button onClick={() => setOpenForm(true)}>Add a review</Button>
       <div className="product-page__reviews">
+        {fitAssessment &&
+          (fitAssessment.hasData ? (
+            <RatingBreakdown
+              reviewCount={reviewCount}
+              rows={ratingBreakdown}
+              onViewMore={onViewMoreReviews}
+            />
+          ) : (
+            <FitSupportEmptyState contactHref={supportContactHref} />
+          ))}
+
         {reviewCount > 0 ? (
-          <>
-            <RatingBreakdown reviewCount={reviewCount} rows={ratingBreakdown} onViewMore={onViewMoreReviews} />
-            {reviews.map((review, i) => (
-              <ReviewCard key={i} {...review} />
-            ))}
-          </>
+          reviews.map((review, i) => (
+            <ReviewCard key={i} {...review} />
+          ))
         ) : (
-          <Button onClick={() => setOpenForm(true)}>Be the first to review</Button>
+          <Button onClick={() => setOpenForm(true)}>
+            Be the first to review
+          </Button>
         )}
       </div>
 
