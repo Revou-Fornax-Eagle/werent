@@ -10,6 +10,7 @@ import { mapApiReview, type ApiReview } from "./utils/mapReviews";
 
 // Falls back here when the URL has no /products/:id segment (e.g. bare "/").
 const DEFAULT_PRODUCT_ID = "8e8ed7ea-c51e-488e-a30b-b15b899aed0f"; // Kemeja Linen Oversize (seeded)
+const DEFAULT_USER_ID = "f2587cb1-4951-4cbb-9958-10dbe275dec6";
 
 /** REV-26: product id comes from the URL path, so navigating to a different
  * /products/:id fetches a different product instead of always the same one. */
@@ -18,61 +19,66 @@ function getProductIdFromPath(): string {
   return match ? decodeURIComponent(match[1]) : DEFAULT_PRODUCT_ID;
 }
 
+function getUserIdFromPath(): string {
+  const match = window.location.pathname.match(/\/users\/([^/]+)/);
+  console.log(match ? decodeURIComponent(match[1]) : "gagal");
+  return match ? decodeURIComponent(match[1]) : DEFAULT_USER_ID;
+}
+
 function App() {
   const [product, setProduct] = useState<Product | null>(null);
   const [productResponse, setProductResponse] = useState<ProductResponse | null>(null);
   const [productNotFound, setProductNotFound] = useState(false);
   const PRODUCT_ID = getProductIdFromPath();
-  const USER_ID = "1a914dc2-6a4d-4f70-a2eb-1453ee8b2636"; // dewi@example.com (seeded)
+  const USER_ID = getUserIdFromPath(); // dewi@example.com (seeded)
 
   const [reviews, setReviews] = useState<ApiReview[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const [fitAssesment, setFitAssesment] = useState<FitAssessment | null>(null);
-
+  const fetchProduct = async () => {
+    try {
+      const response = await fetch(`${API_URL}/products/${PRODUCT_ID}`);
+      if (response.status === 404) {
+        setProductNotFound(true);
+        return;
+      }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setProductNotFound(false);
+      const data: ProductResponse = await response.json();
+      console.log("Fetched product data:", data);
+      setProductResponse(data);
+      setProduct(data.data.product);
+      setFitAssesment(data.data.fitAssessment);
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+    }
+  };
   // fetch product
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(`${API_URL}/products/${PRODUCT_ID}`);
-        if (response.status === 404) {
-          setProductNotFound(true);
-          return;
-        }
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        setProductNotFound(false);
-        const data: ProductResponse = await response.json();
-        console.log("Fetched product data:", data);
-        setProductResponse(data);
-        setProduct(data.data.product);
-        setFitAssesment(data.data.fitAssessment);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-      }
-    };
     fetchProduct();
   }, [PRODUCT_ID]);
 
   //fetch reviews
-  // useEffect(() => {
-  //   const fetchReviews = async () => {
-  //     try {
-  //       const response = await fetch(`${API_URL}/reviews/product/${PRODUCT_ID}`);
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-  //       const data = await response.json();
-  //       console.log("Fetched review data:", data);
-  //       setReviews(data.data.reviews);
-  //     } catch (error) {
-  //       console.error("Error fetching product data:", error);
-  //     }
-  //   };
-  //   fetchReviews();
-  // }, []);
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch(`${API_URL}/reviews/product/${PRODUCT_ID}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Fetched review data:", data);
+        setReviews(data.data.reviews);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    };
+    fetchReviews();
+  }, []);
   const liveReviewCount = useRealtimeReviewCount(PRODUCT_ID, productResponse?.data.reviewCount ?? 0);
   const handleSubmitReview = async (data: ReviewSubmitData) => {
     setIsSubmitting(true);
@@ -96,16 +102,21 @@ function App() {
       }
       // count ter-update sendiri via socket listener (liveReviewCount)
       setReviews((prev) => [result.data.review, ...prev]);
+      //re fetch producst for simulate real-time
+      // label percentage on fit feedback
+      await fetchProduct();
+      return true;
     } catch (error) {
       console.error("Submit review failed:", error);
       setSubmitError(error instanceof Error ? error.message : "Gagal menyimpan review");
+      return false;
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const processFitPercentage = (totalResponse: number, distribution: number): number => {
-    return (distribution / totalResponse) * 100;
+    return Number(((distribution / totalResponse) * 100).toFixed(2));
   };
   return (
     <>
@@ -148,13 +159,12 @@ function App() {
         ]}
         reviews={reviews.map(mapApiReview)}
         submitting={isSubmitting}
+        submitError={submitError}
         onViewSizeGuide={() => alert("View size guide")}
         onViewCollection={() => alert("View the collection")}
         onViewMoreReviews={() => alert("View more reviews")}
         onSubmitReview={handleSubmitReview}
       />
-
-      {submitError && <p className="submit-error">Error: {submitError}</p>}
 
       <CheckoutBar price="Rp 300.000" duration="4 Day" onAdd={() => alert("Added to cart")} />
       {/* 

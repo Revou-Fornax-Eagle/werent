@@ -53,10 +53,12 @@ interface ProductPageProps {
   ratingBreakdown: BreakdownRow[];
   reviews: Review[];
   submitting?: boolean;
+  submitError?: string | null;
+  onClearSubmitError?: () => void;
   onViewSizeGuide?: () => void;
   onViewCollection?: () => void;
   onViewMoreReviews?: () => void;
-  onSubmitReview?: (data: ReviewSubmitData) => void;
+  onSubmitReview?: (data: ReviewSubmitData) => Promise<boolean>;
 }
 
 export default function ProductPage({
@@ -75,12 +77,19 @@ export default function ProductPage({
   ratingBreakdown,
   reviews,
   submitting,
+  submitError,
+  onClearSubmitError,
   onViewSizeGuide,
   onViewCollection,
   onViewMoreReviews,
   onSubmitReview,
 }: ProductPageProps) {
   const [openForm, setOpenForm] = useState(false);
+  const openReviewForm = () => {
+    onClearSubmitError?.();
+    setOpenForm(true);
+  };
+
   return (
     <div className="product-page">
       <ProductHero imageUrl={heroImageUrl} imageAlt={title} credit={heroCredit} />
@@ -90,28 +99,11 @@ export default function ProductPage({
       <DesignerInfo onViewCollection={onViewCollection} />
 
       <ProductDetailSection fabric={fabric} fit={fit} sizeGuide={sizeGuide} details={details} />
-      <Button onClick={() => setOpenForm(true)}>Add a review</Button>
+      {reviewCount > 0 ? <Button onClick={openReviewForm}>Add a review</Button> : ""}
       <div className="product-page__reviews">
-        {fitAssessment &&
-          (fitAssessment.hasData ? (
-            <RatingBreakdown
-              reviewCount={reviewCount}
-              rows={ratingBreakdown}
-              onViewMore={onViewMoreReviews}
-            />
-          ) : (
-            <FitSupportEmptyState contactHref={supportContactHref} />
-          ))}
+        {fitAssessment && (fitAssessment.hasData ? <RatingBreakdown reviewCount={reviewCount} rows={ratingBreakdown} onViewMore={onViewMoreReviews} /> : <FitSupportEmptyState contactHref={supportContactHref} />)}
 
-        {reviewCount > 0 ? (
-          reviews.map((review, i) => (
-            <ReviewCard key={i} {...review} />
-          ))
-        ) : (
-          <Button onClick={() => setOpenForm(true)}>
-            Be the first to review
-          </Button>
-        )}
+        {reviewCount > 0 ? reviews.map((review, i) => <ReviewCard key={i} {...review} />) : <Button onClick={openReviewForm}>Be the first to review</Button>}
       </div>
 
       {openForm && (
@@ -129,16 +121,21 @@ export default function ProductPage({
             </div>
 
             <form
-              onSubmit={(e) => {
+              onSubmit={async (e) => {
                 e.preventDefault();
                 const form = new FormData(e.currentTarget);
-                onSubmitReview?.({
+                const data: ReviewSubmitData = {
                   rating: Number(form.get("rating")),
                   title: String(form.get("title") ?? "").trim(),
                   body: String(form.get("comment") ?? "").trim(),
                   fitFeedback: String(form.get("fit")),
-                });
-                setOpenForm(false);
+                };
+                if (!onSubmitReview) {
+                  setOpenForm(false);
+                  return;
+                }
+                const ok = await onSubmitReview(data);
+                if (ok) setOpenForm(false);
               }}
             >
               <div className="form-group">
@@ -176,7 +173,11 @@ export default function ProductPage({
 
                 <textarea id="comment" name="comment" placeholder="Share your experience..." rows={5} minLength={10} maxLength={2000} required />
               </div>
-
+              {submitError && (
+                <p role="alert" className="review-form__error">
+                  {submitError}
+                </p>
+              )}
               <button type="submit" className="review-form__submit">
                 {submitting ? "Menyimpan..." : "Submit Review"}
               </button>
