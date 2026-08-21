@@ -30,49 +30,48 @@ function App() {
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const [fitAssesment, setFitAssesment] = useState<FitAssessment | null>(null);
-
+  const fetchProduct = async () => {
+    try {
+      const response = await fetch(`${API_URL}/products/${PRODUCT_ID}`);
+      if (response.status === 404) {
+        setProductNotFound(true);
+        return;
+      }
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      setProductNotFound(false);
+      const data: ProductResponse = await response.json();
+      console.log("Fetched product data:", data);
+      setProductResponse(data);
+      setProduct(data.data.product);
+      setFitAssesment(data.data.fitAssessment);
+    } catch (error) {
+      console.error("Error fetching product data:", error);
+    }
+  };
   // fetch product
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const response = await fetch(`${API_URL}/products/${PRODUCT_ID}`);
-        if (response.status === 404) {
-          setProductNotFound(true);
-          return;
-        }
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        setProductNotFound(false);
-        const data: ProductResponse = await response.json();
-        console.log("Fetched product data:", data);
-        setProductResponse(data);
-        setProduct(data.data.product);
-        setFitAssesment(data.data.fitAssessment);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-      }
-    };
     fetchProduct();
   }, [PRODUCT_ID]);
 
   //fetch reviews
-  // useEffect(() => {
-  //   const fetchReviews = async () => {
-  //     try {
-  //       const response = await fetch(`${API_URL}/reviews/product/${PRODUCT_ID}`);
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! status: ${response.status}`);
-  //       }
-  //       const data = await response.json();
-  //       console.log("Fetched review data:", data);
-  //       setReviews(data.data.reviews);
-  //     } catch (error) {
-  //       console.error("Error fetching product data:", error);
-  //     }
-  //   };
-  //   fetchReviews();
-  // }, []);
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch(`${API_URL}/reviews/product/${PRODUCT_ID}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Fetched review data:", data);
+        setReviews(data.data.reviews);
+      } catch (error) {
+        console.error("Error fetching product data:", error);
+      }
+    };
+    fetchReviews();
+  }, []);
   const liveReviewCount = useRealtimeReviewCount(PRODUCT_ID, productResponse?.data.reviewCount ?? 0);
   const handleSubmitReview = async (data: ReviewSubmitData) => {
     setIsSubmitting(true);
@@ -96,9 +95,14 @@ function App() {
       }
       // count ter-update sendiri via socket listener (liveReviewCount)
       setReviews((prev) => [result.data.review, ...prev]);
+      //re fetch producst for simulate real-time
+      // label percentage on fit feedback
+      await fetchProduct();
+      return true;
     } catch (error) {
       console.error("Submit review failed:", error);
       setSubmitError(error instanceof Error ? error.message : "Gagal menyimpan review");
+      return false;
     } finally {
       setIsSubmitting(false);
     }
@@ -148,13 +152,12 @@ function App() {
         ]}
         reviews={reviews.map(mapApiReview)}
         submitting={isSubmitting}
+        submitError={submitError}
         onViewSizeGuide={() => alert("View size guide")}
         onViewCollection={() => alert("View the collection")}
         onViewMoreReviews={() => alert("View more reviews")}
         onSubmitReview={handleSubmitReview}
       />
-
-      {submitError && <p className="submit-error">Error: {submitError}</p>}
 
       <CheckoutBar price="Rp 300.000" duration="4 Day" onAdd={() => alert("Added to cart")} />
       {/* 
