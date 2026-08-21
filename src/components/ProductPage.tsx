@@ -5,6 +5,8 @@ import ProductDetailSection from "./ProductDetailSection";
 import RatingBreakdown from "./RatingBreakdown";
 import ReviewCard from "./ReviewCard";
 import "./ProductPage.css";
+import FitSupportEmptyState from "./FitSupportEmptyState";
+import type { FitAssessment } from "../types/productData";
 import Button from "./Button";
 import { useState } from "react";
 
@@ -44,10 +46,10 @@ interface ProductPageProps {
   size: string;
   fabric: string;
   fit: string;
+  fitAssessment?: FitAssessment;
+  supportContactHref: string;
   details: string;
   sizeGuide: SizeGuideRow[];
-  designerName: string;
-  designerImageUrl?: string;
   ratingBreakdown: BreakdownRow[];
   reviews: Review[];
   submitting?: boolean;
@@ -68,10 +70,10 @@ export default function ProductPage({
   size,
   fabric,
   fit,
+  fitAssessment,
+  supportContactHref,
   details,
   sizeGuide,
-  designerName,
-  designerImageUrl,
   ratingBreakdown,
   reviews,
   submitting,
@@ -94,21 +96,14 @@ export default function ProductPage({
 
       <ProductInfo title={title} rating={rating} reviewCount={reviewCount} size={size} onViewSizeGuide={onViewSizeGuide} />
 
-      <DesignerInfo designerName={designerName} designerImageUrl={designerImageUrl} onViewCollection={onViewCollection} />
+      <DesignerInfo onViewCollection={onViewCollection} />
 
       <ProductDetailSection fabric={fabric} fit={fit} sizeGuide={sizeGuide} details={details} />
       {reviewCount > 0 ? <Button onClick={openReviewForm}>Add a review</Button> : ""}
       <div className="product-page__reviews">
-        {reviewCount > 0 ? (
-          <>
-            <RatingBreakdown reviewCount={reviewCount} rows={ratingBreakdown} onViewMore={onViewMoreReviews} />
-            {reviews.map((review, i) => (
-              <ReviewCard key={i} {...review} />
-            ))}
-          </>
-        ) : (
-          <Button onClick={openReviewForm}>Be the first to review</Button>
-        )}
+        {fitAssessment && (fitAssessment.hasData ? <RatingBreakdown reviewCount={reviewCount} rows={ratingBreakdown} onViewMore={onViewMoreReviews} /> : <FitSupportEmptyState contactHref={supportContactHref} />)}
+
+        {reviewCount > 0 ? reviews.map((review, i) => <ReviewCard key={i} {...review} />) : <Button onClick={openReviewForm}>Be the first to review</Button>}
       </div>
 
       {openForm && (
