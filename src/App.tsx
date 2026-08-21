@@ -10,6 +10,7 @@ import { mapApiReview, type ApiReview } from "./utils/mapReviews";
 
 // Falls back here when the URL has no /products/:id segment (e.g. bare "/").
 const DEFAULT_PRODUCT_ID = "8e8ed7ea-c51e-488e-a30b-b15b899aed0f"; // Kemeja Linen Oversize (seeded)
+const DEFAULT_USER_ID = "f2587cb1-4951-4cbb-9958-10dbe275dec6";
 
 /** REV-26: product id comes from the URL path, so navigating to a different
  * /products/:id fetches a different product instead of always the same one. */
@@ -18,12 +19,18 @@ function getProductIdFromPath(): string {
   return match ? decodeURIComponent(match[1]) : DEFAULT_PRODUCT_ID;
 }
 
+function getUserIdFromPath(): string {
+  const match = window.location.pathname.match(/\/users\/([^/]+)/);
+  console.log(match ? decodeURIComponent(match[1]) : "gagal");
+  return match ? decodeURIComponent(match[1]) : DEFAULT_USER_ID;
+}
+
 function App() {
   const [product, setProduct] = useState<Product | null>(null);
   const [productResponse, setProductResponse] = useState<ProductResponse | null>(null);
   const [productNotFound, setProductNotFound] = useState(false);
   const PRODUCT_ID = getProductIdFromPath();
-  const USER_ID = "1a914dc2-6a4d-4f70-a2eb-1453ee8b2636"; // dewi@example.com (seeded)
+  const USER_ID = getUserIdFromPath(); // dewi@example.com (seeded)
 
   const [reviews, setReviews] = useState<ApiReview[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -109,7 +116,7 @@ function App() {
   };
 
   const processFitPercentage = (totalResponse: number, distribution: number): number => {
-    return (distribution / totalResponse) * 100;
+    return Number(((distribution / totalResponse) * 100).toFixed(2));
   };
   return (
     <>
